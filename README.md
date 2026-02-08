@@ -1,131 +1,136 @@
-# Tambo Template
+# ResQ-AI: Generative UI for Crisis Response
 
-This is a starter NextJS app with Tambo hooked up to get your AI app development started quickly.
+ResQ-AI is an intelligent crisis management platform that uses Generative AI to instantly render tactical user interfaces based on natural language commands. Instead of navigating complex dashboards, commanders simply describe the situation, and the system generates live maps, logistics inventories, and situation reports in real-time.
 
-## Get Started
 
-1. Run `npm create-tambo@latest my-tambo-app` for a new project
 
-2. `npm install`
+## Table of Contents
 
-3. `npx tambo init`
+- [Live Demo](#live-demo)
+- [Key Features](#key-features)
+- [Technology Stack](#technology-stack)
+- [Usage Guide & Demo Scenarios](#usage-guide--demo-scenarios)
+  - [1. Generative Mapping](#1-generative-mapping)
+  - [2. Auto-Logistics Inventory](#2-auto-logistics-inventory)
+  - [3. SITREP Generation & PDF Export](#3-sitrep-generation--pdf-export)
+- [Installation](#installation)
+- [Configuration](#configuration)
+- [License](#license)
 
-- or rename `example.env.local` to `.env.local` and add your tambo API key you can get for free [here](https://tambo.co/dashboard).
+## Live Demo
 
-4. Run `npm run dev` and go to `localhost:3000` to use the app!
+Access the live application here: [Insert Vercel Link Here]
 
-## Customizing
+## Key Features
 
-### Change what components tambo can control
+1.  **Generative Tactical Mapping**: Instantly identifies locations, threat types (fire, structural, medical), and safe zones from text descriptions and renders them on an interactive Leaflet map.
+2.  **Dynamic Inventory Management**: Automatically categorizes resources (medical, food, equipment) and flags critical shortages based on natural language inputs.
+3.  **Automated Reporting**: Synthesizes all active data into a formal Situation Report (SITREP) and generates a downloadable PDF for official communication.
 
-You can see how components are registered with tambo in `src/lib/tambo.ts`:
+## Technology Stack
 
-```tsx
-export const components: TamboComponent[] = [
-  {
-    name: "Graph",
-    description:
-      "A component that renders various types of charts (bar, line, pie) using Recharts. Supports customizable data visualization with labels, datasets, and styling options.",
-    component: Graph,
-    propsSchema: graphSchema,
-  },
-  // Add more components here
-];
-```
+-   **Framework**: Next.js 15 (App Router)
+-   **Styling**: Tailwind CSS (Custom Aquamarine Theme)
+-   **AI Integration**: Tambo SDK (Generative UI)
+-   **Maps**: React-Leaflet & OpenStreetMap
+-   **State Management**: React Context API (CrisisContext)
+-   **PDF Generation**: jsPDF & AutoTable
+-   **Icons**: Lucide React
 
-You can install the graph component into any project with:
+## Usage Guide & Demo Scenarios
 
-```bash
-npx tambo add graph
-```
+Follow this step-by-step guide to demonstrate the capabilities of ResQ-AI.
 
-The example Graph component demonstrates several key features:
+### 1. Generative Mapping
 
-- Different prop types (strings, arrays, enums, nested objects)
-- Multiple chart types (bar, line, pie)
-- Customizable styling (variants, sizes)
-- Optional configurations (title, legend, colors)
-- Data visualization capabilities
+The system extracts geospatial data and threat levels from your text.
 
-Update the `components` array with any component(s) you want tambo to be able to use in a response!
+**Scenario**: A structural collapse and fire in a dense urban area.
 
-You can find more information about the options [here](https://docs.tambo.co/concepts/generative-interfaces/generative-components)
+**Prompt to Enter:**
+> EMERGENCY ALERT: Massive gas explosion reported at Indiranagar 12th Main. Two buildings have collapsed (Structural Damage). Fire is spreading south towards the Metro Station (Critical Fire Zone). Establish a Medical Triage camp at the Defence Colony Playground (Safe Zone). Visualize the tactical map now.
 
-### Add tools for tambo to use
+**Result**:
+The system renders a map centered on Indiranagar.
+-   **Red Markers**: Indicate Fire/Critical zones.
+-   **Blue Markers**: Indicate Structural damage.
+-   **Green Markers**: Indicate Safe/Medical zones.
 
-Tools are defined with `inputSchema` and `outputSchema`:
+![Screenshot of Generative Map showing Indiranagar with red and blue markers](screenshots/feature-map.jpeg)
 
-```tsx
-export const tools: TamboTool[] = [
-  {
-    name: "globalPopulation",
-    description:
-      "A tool to get global population trends with optional year range filtering",
-    tool: getGlobalPopulationTrend,
-    inputSchema: z.object({
-      startYear: z.number().optional(),
-      endYear: z.number().optional(),
-    }),
-    outputSchema: z.array(
-      z.object({
-        year: z.number(),
-        population: z.number(),
-        growthRate: z.number(),
-      }),
-    ),
-  },
-];
-```
+### 2. Auto-Logistics Inventory
 
-Find more information about tools [here.](https://docs.tambo.co/concepts/tools)
+The system understands logistics, categorizes items, and highlights urgency.
 
-### The Magic of Tambo Requires the TamboProvider
+**Scenario**: Mobilizing resources for the victims.
 
-Make sure in the TamboProvider wrapped around your app:
+**Prompt to Enter:**
+> Mobilize logistics immediately. We have 200 casualties. Dispatch 500 Trauma Kits and 50 Stretchers (Equipment). We urgently need 20 O+ Blood Packs (Critical). Also send 1000 Water Packets and 500 MREs for the survivors. Update the manifest.
 
-```tsx
-...
-<TamboProvider
-  apiKey={process.env.NEXT_PUBLIC_TAMBO_API_KEY!}
-  components={components} // Array of components to control
-  tools={tools} // Array of tools it can use
->
-  {children}
-</TamboProvider>
-```
+**Result**:
+A "Logistics Manifest" table appears.
+-   **Medical**: Trauma Kits, Blood Packs.
+-   **Food**: Water Packets, MREs.
+-   **Equipment**: Stretchers.
+-   **Critical Status**: The "Blood Packs" row is highlighted in red/bold to indicate critical urgency.
 
-In this example we do this in the `Layout.tsx` file, but you can do it anywhere in your app that is a client component.
+![Screenshot of Supply Inventory table with critical items highlighted](screenshots/feature-inventory.jpeg)
 
-### Voice input
+### 3. SITREP Generation & PDF Export
 
-The template includes a `DictationButton` component using the `useTamboVoice` hook for speech-to-text input.
+The system aggregates all session data into a formal report.
 
-### MCP (Model Context Protocol)
+**Scenario**: Generating a handover report for headquarters.
 
-The template includes MCP support for connecting to external tools and resources. You can use the MCP hooks from `@tambo-ai/react/mcp`:
+**Prompt to Enter:**
+> Situation is currently contained. Generate a formal SITREP (Situation Report) summarizing the structural damage locations and our current logistics status. Provide the downloadable PDF for the Incident Commander.
 
-- `useTamboMcpPromptList` - List available prompts from MCP servers
-- `useTamboMcpPrompt` - Get a specific prompt
-- `useTamboMcpResourceList` - List available resources
+**Result**:
+The system provides a text summary and renders a "Download SITREP" card. Clicking it downloads a PDF containing:
+-   **Header**: Official Incident Report title and timestamp.
+-   **Table 1**: Complete inventory list.
+-   **Table 2**: List of all identified locations and their coordinates.
 
-See `src/components/tambo/mcp-components.tsx` for example usage.
+![Screenshot of Report Download Card and PDF Preview](screenshots/feature-report.jpeg)
 
-### Change where component responses are shown
+## Installation
 
-The components used by tambo are shown alongside the message response from tambo within the chat thread, but you can have the result components show wherever you like by accessing the latest thread message's `renderedComponent` field:
+To run this project locally:
 
-```tsx
-const { thread } = useTambo();
-const latestComponent =
-  thread?.messages[thread.messages.length - 1]?.renderedComponent;
+1.  **Clone the repository:**
+    ```bash
+    git clone [https://github.com/YOUR_USERNAME/resq-ai.git](https://github.com/YOUR_USERNAME/resq-ai.git)
+    cd resq-ai
+    ```
 
-return (
-  <div>
-    {latestComponent && (
-      <div className="my-custom-wrapper">{latestComponent}</div>
-    )}
-  </div>
-);
-```
+2.  **Install dependencies:**
+    ```bash
+    npm install
+    # or
+    yarn install
+    ```
 
-For more detailed documentation, visit [Tambo's official docs](https://docs.tambo.co).
+3.  **Set up Environment Variables:**
+    Create a `.env.local` file in the root directory and add your API keys:
+    ```bash
+    NEXT_PUBLIC_TAMBO_API_KEY=your_api_key_here
+    NEXT_PUBLIC_TAMBO_URL=[https://api.tambo.ai/v1/chat](https://api.tambo.ai/v1/chat)
+    ```
+
+4.  **Run the development server:**
+    ```bash
+    npm run dev
+    ```
+
+5.  Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+## Configuration
+
+The application uses a custom `CrisisContext` to manage state without a backend database for demonstration purposes. This ensures fast, reliable performance during live presentations.
+
+-   **Map Configuration**: Default center is set to Bangalore (12.9716, 77.5946). This can be modified in `src/components/resq/DisasterMap.tsx`.
+-   **Theme**: The visual theme is defined in `src/app/globals.css` using Tailwind CSS variables.
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
