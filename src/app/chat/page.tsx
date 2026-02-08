@@ -5,7 +5,7 @@ import { MessageThreadFull } from "@/components/tambo/message-thread-full";
 import { useMcpServers } from "@/components/tambo/mcp-config-modal";
 import { components, tools } from "@/lib/tambo";
 import { TamboProvider, useTamboThreadInput } from "@tambo-ai/react";
-import { Zap, Radio, Globe, ShieldCheck, Activity } from "lucide-react";
+import { Zap, Radio, Globe, ShieldCheck } from "lucide-react";
 import { CrisisProvider } from "@/context/CrisisContext";
 
 function TacticalHUD() {
@@ -16,12 +16,24 @@ function TacticalHUD() {
     setIsRunning(true);
     const scenarioText = `
 [SYSTEM INSTRUCTION: You are ResQ-AI, a Tactical Disaster Response Coordinator. 
-RULES: 
-1. Render 'DisasterMap' immediately for locations.
-2. Render 'SupplyInventory' for resources.
-3. Keep text brief and military-style.]
+ACTION REQUIRED:
+1. Render 'DisasterMap' centered on Indiranagar (12.9716, 77.6412) with the specific markers below.
+2. Render 'SupplyInventory' with the listed resources.
+3. Provide a brief SITREP summary.]
 
-REPORT: EMERGENCY ALERT: 6.8 Magnitude Earthquake detected in Indiranagar, Bangalore. Structural damage reported at 3 coordinates. We need to immediately mobilize 500 Food Packets and Search & Rescue teams. Visualize the impact zone now.
+REPORT: EMERGENCY ALERT: 6.8 Magnitude Earthquake centered in Indiranagar, Bangalore.
+
+INCIDENT LOCATIONS (VISUALIZE ON MAP):
+1. **Structural Collapse** (High Severity): Residential Complex at 12th Main Road. Coordinates: (12.9784, 77.6408).
+2. **Critical Fire** (Extreme Severity): Gas line explosion at Indiranagar Metro Station. Coordinates: (12.9730, 77.6350).
+3. **Medical Triage / Safe Zone**: Establish base at Defence Colony Playground. Coordinates: (12.9680, 77.6450).
+
+LOGISTICS MANIFEST (UPDATE INVENTORY):
+- **Medical**: 200 Trauma Kits, 50 O+ Blood Packs (CRITICAL).
+- **Food**: 1000 Water Packets, 500 MREs.
+- **Equipment**: 50 Stretchers, 10 Generators.
+
+Execute mobilization and visualization immediately.
     `.trim();
     
     setValue(scenarioText);

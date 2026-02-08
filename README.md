@@ -19,7 +19,7 @@ ResQ-AI is an intelligent crisis management platform that uses Generative AI to 
 
 ## Live Demo
 
-Access the live application here: [Insert Vercel Link Here]
+Access the live application here: https://resq-ai-beta.vercel.app/
 
 ## Key Features
 
