@@ -10,7 +10,6 @@ import { DataCard, dataCardSchema } from "@/components/ui/card-data";
 import { DisasterMap } from "@/components/resq/DisasterMap";
 import { SupplyInventory } from "@/components/resq/SupplyInventory";
 import { ReportGenerator } from "@/components/resq/ReportGenerator";
-import { getIncidentData } from "@/services/incident-data";
 // --- SERVICE IMPORTS ---
 import {
   getCountryPopulations,
@@ -64,35 +63,6 @@ export const tools: TamboTool[] = [
         growthRate: z.number(),
       }),
     ),
-  },
-  {
-    name: "get_incident_data",
-    description: "Fetches the current real-time logistics manifest and geospatial map data for a specific incident thread. Use this to generate accurate SITREPs.",
-    tool: getIncidentData,
-    inputSchema: z.object({
-      threadId: z.string().describe("The ID of the current conversation thread"),
-    }),
-    // FIX: Added the missing outputSchema
-    outputSchema: z.object({
-      logistics: z.array(
-        z.object({
-          name: z.string(),
-          count: z.number(),
-          category: z.string(), // Using string to be flexible, or match your enum
-          critical: z.boolean().optional(),
-        })
-      ),
-      geospatial: z.array(
-        z.object({
-          label: z.string().optional(),
-          lat: z.number(),
-          lng: z.number(),
-          type: z.string().optional(),
-          details: z.any().optional(), // JSONB data
-        })
-      ),
-      generated_at: z.string(),
-    }),
   },
 ];
 
