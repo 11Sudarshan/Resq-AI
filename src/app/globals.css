@@ -1,0 +1,176 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  /* Tailwind CSS Variables customized with tambo colors */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+
+  /* Tambo Specific Variables */
+  --color-container: var(--container);
+  --color-backdrop: var(--backdrop);
+  --color-muted-backdrop: var(--muted-backdrop);
+}
+
+:root {
+  /* LIGHT MODE: Clean & Crisp */
+  --background: oklch(0.985 0.005 240);
+  --foreground: oklch(0.15 0.05 260);    /* Deep text for contrast */
+  
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.15 0.05 260);
+  
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.15 0.05 260);
+  
+  /* --- CHANGED: TAMBO AQUAMARINE (#7FFFC4) --- */
+  /* Using OKLCH approximation for #7FFFC4 */
+  --primary: oklch(0.88 0.14 165);       
+  /* Since Primary is bright, text inside it must be dark */
+  --primary-foreground: oklch(0.15 0.05 260); 
+  
+  --secondary: oklch(0.96 0.01 165);
+  --secondary-foreground: oklch(0.3 0.05 165);
+  
+  --muted: oklch(0.96 0.01 260);
+  --muted-foreground: oklch(0.5 0.04 260);
+  
+  --accent: oklch(0.94 0.03 165);
+  --accent-foreground: oklch(0.2 0.05 165);
+  
+  --destructive: oklch(0.6 0.18 25);
+  --border: oklch(0.92 0.01 260);
+  --input: oklch(0.92 0.01 260);
+  --ring: oklch(0.88 0.14 165); /* Matches Primary */
+  
+  /* Chart colors preserved */
+  --chart-1: oklch(0.72 0.15 60);
+  --chart-2: oklch(0.62 0.2 6);
+  --chart-3: oklch(0.53 0.2 262);
+  --chart-4: oklch(0.7 0.13 165);
+  --chart-5: oklch(0.62 0.2 313);
+
+  /* Tambo Specifics */
+  --container: oklch(0.98 0 247);
+  --backdrop: oklch(0.25 0.07 252 / 0.25);
+  --muted-backdrop: oklch(0.25 0.07 252 / 0.1);
+  --radius: 0.75rem;
+  --panel-left-width: 500px;
+  --panel-right-width: 500px;
+  --sidebar-width: 3rem;
+}
+
+.dark {
+  /* DARK MODE: Tactical HUD */
+  --background: oklch(0.12 0.04 260);   /* Deep Navy Background */
+  --foreground: oklch(0.95 0.02 165);   /* Soft Aquamarine-White Text */
+  
+  --card: oklch(0.16 0.05 260);         /* Panel Background */
+  --card-foreground: oklch(0.95 0.02 165);
+  
+  --popover: oklch(0.16 0.05 260);
+  --popover-foreground: oklch(0.95 0.02 165);
+  
+  /* --- CHANGED: TAMBO AQUAMARINE (#7FFFC4) --- */
+  --primary: oklch(0.88 0.14 165);       
+  --primary-foreground: oklch(0.12 0.04 260); /* Dark text on bright button */
+  
+  --secondary: oklch(0.25 0.05 260);
+  --secondary-foreground: oklch(0.9 0.05 165);
+  
+  --muted: oklch(0.25 0.05 260);
+  --muted-foreground: oklch(0.7 0.05 260);
+  
+  --accent: oklch(0.2 0.05 165);
+  --accent-foreground: oklch(0.9 0.05 165);
+  
+  --destructive: oklch(0.5 0.18 25);
+  --border: oklch(0.3 0.05 165);        /* Subtle Aquamarine Borders */
+  --input: oklch(0.25 0.05 260);
+  --ring: oklch(0.88 0.14 165);
+  
+  /* Chart colors preserved */
+  --chart-1: oklch(0.72 0.15 60);
+  --chart-2: oklch(0.62 0.2 6);
+  --chart-3: oklch(0.53 0.2 262);
+  --chart-4: oklch(0.7 0.13 165);
+  --chart-5: oklch(0.62 0.2 313);
+
+  /* Tambo Specifics */
+  --container: oklch(0.98 0 247);
+  --backdrop: oklch(0.1 0.05 260 / 0.5);
+  --muted-backdrop: oklch(0.1 0.05 260 / 0.2);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground transition-colors duration-300;
+    font-family: Arial, Helvetica, sans-serif;
+  }
+}
+
+/* --- ANIMATIONS --- */
+@keyframes flash {
+  0%, 100% { background-color: transparent; }
+  50% { background-color: var(--primary); opacity: 0.3; }
+}
+.animate-flash { animation: flash 1s ease-in-out; }
+
+@keyframes thinking-gradient {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+/* Updated gradient to use Aquamarine tones instead of Purple */
+.animate-thinking-gradient {
+  background: linear-gradient(90deg, oklch(0.14 0 0) 0%, oklch(0.88 0.14 165) 50%, oklch(0.14 0 0) 100%);
+  background-size: 200% 100%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: thinking-gradient 2s linear infinite;
+}
+
+/* --- RESQ-AI CUSTOM UTILITIES --- */
+@layer utilities {
+  .glass-panel {
+    @apply backdrop-blur-md bg-white/80 dark:bg-slate-900/80 border border-white/20 shadow-xl;
+  }
+  
+  /* Leaflet Map Overrides */
+  .dark .leaflet-popup-content-wrapper, 
+  .dark .leaflet-popup-tip {
+    background-color: var(--card);
+    color: var(--foreground);
+    border: 1px solid var(--border);
+    border-radius: 0.5rem;
+  }
+  
+  .leaflet-control-attribution {
+    @apply text-[10px] opacity-50;
+  }
+}
